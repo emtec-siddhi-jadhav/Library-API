@@ -23,19 +23,15 @@ export class BookRepository extends Repository<BookEntity> {
     return await query.getMany();
   }
 
-  async createBook(
-    createBookDto: CreateBookDTO,
-    user: UserEntity,
-  ): Promise<BookEntity> {
+  async createBook(createBookDto: CreateBookDTO): Promise<BookEntity> {
     const book = new BookEntity();
     book.title = createBookDto.title;
     book.author = createBookDto.author;
     book.category = createBookDto.category;
     book.status = BookStatus.Available;
     console.log(book);
-    book.user = user;
+    book.user = null;
     await book.save();
-    delete book.user;
     return book;
   }
 }

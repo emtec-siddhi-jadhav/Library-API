@@ -30,11 +30,8 @@ export class BookController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createBook(
-    @GetUser() user: UserEntity,
-    @Body() createBookDto: CreateBookDTO,
-  ): Promise<BookEntity> {
-    return this.bookService.createBook(createBookDto, user);
+  createBook(@Body() createBookDto: CreateBookDTO): Promise<BookEntity> {
+    return this.bookService.createBook(createBookDto);
   }
 
   @Get()

@@ -23,13 +23,10 @@ export class BookService {
   }
 
   //creating a new book
-  async createBook(
-    createBookDto: CreateBookDTO,
-    user: UserEntity,
-  ): Promise<BookEntity> {
+  async createBook(createBookDto: CreateBookDTO): Promise<BookEntity> {
     //const author = new AuthorEntity(createBookDto.author);
     //createBookDto.author = author;
-    return this.bookRepository.createBook(createBookDto, user);
+    return this.bookRepository.createBook(createBookDto);
   }
 
   async updateBook(

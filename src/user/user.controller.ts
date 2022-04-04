@@ -55,9 +55,10 @@ export class UserController {
   @Put('/:id')
   updateUser(
     @GetUser() user: UserEntity,
-    @Query() updateUserDto: UpdateUserDTO,
+    @Body() updateUserDto: UpdateUserDTO,
     @Param('id') id: number,
   ): Promise<UpdateResult> {
+    console.log(updateUserDto);
     return this.userService.updateUser(updateUserDto, id);
   }
 

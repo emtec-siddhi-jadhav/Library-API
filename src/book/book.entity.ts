@@ -5,6 +5,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -27,14 +29,15 @@ export class BookEntity extends BaseEntity {
   @Column()
   status: BookStatus;
 
-  @ManyToOne((type) => UserEntity, (user) => user.books, { eager: false })
-  user: UserEntity;
+  @ManyToOne((type) => UserEntity, (user) => user.books, {
+    eager: false,
+    nullable: true,
+  })
+  @JoinTable({})
+  user: UserEntity | null;
 
   /*@ManyToOne((type) => AuthorEntity, (authors) => authors.books, {
     eager: false,
   })
   authors: AuthorEntity;*/
-
-  @Column()
-  userId: number;
 }
