@@ -1,5 +1,5 @@
 import { UserEntity } from 'src/user/user.entity';
-//import { AuthorEntity } from 'src/author/author.entity';
+///import { AuthorEntity } from 'src/Author/author.entity';
 
 import {
   BaseEntity,
@@ -8,6 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { BookStatus } from './book.enum';
 
 @Entity('Book')
 export class BookEntity extends BaseEntity {
@@ -23,13 +24,16 @@ export class BookEntity extends BaseEntity {
   @Column()
   category: string;
 
+  @Column()
+  status: BookStatus;
+
   @ManyToOne((type) => UserEntity, (user) => user.books, { eager: false })
   user: UserEntity;
 
-  //@ManyToOne((type) => AuthorEntity, (authors) => authors.books, {
-  //  eager: false,
-  //})
-  //authors: AuthorEntity;
+  /*@ManyToOne((type) => AuthorEntity, (authors) => authors.books, {
+    eager: false,
+  })
+  authors: AuthorEntity;*/
 
   @Column()
   userId: number;
