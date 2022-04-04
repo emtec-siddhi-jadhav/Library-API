@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/user/user.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { BookEntity } from './book.entity';
+import { BookStatus } from './book.enum';
 import { BookRepository } from './book.repository';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
@@ -41,6 +42,13 @@ export class BookService {
       category: updateBookDto.category,
     };
     return this.bookRepository.update(id, updateData);
+  }
+
+  async updateBookStatus(id: string, status: BookStatus): Promise<BookEntity> {
+    const book = await this.bookRepository.findOne(id);
+    book.status = status;
+    await book.save();
+    return book;
   }
 
   async deleteBook(id: number): Promise<DeleteResult> {

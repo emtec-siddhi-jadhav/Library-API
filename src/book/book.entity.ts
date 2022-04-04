@@ -8,6 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { BookStatus } from './book.enum';
 
 @Entity('Book')
 export class BookEntity extends BaseEntity {
@@ -22,6 +23,9 @@ export class BookEntity extends BaseEntity {
 
   @Column()
   category: string;
+
+  @Column()
+  status: BookStatus;
 
   @ManyToOne((type) => UserEntity, (user) => user.books, { eager: false })
   user: UserEntity;

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -16,6 +17,7 @@ import { GetUser } from 'src/user/get.user.decorators';
 import { UserEntity } from 'src/user/user.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { BookEntity } from './book.entity';
+import { BookStatus } from './book.enum';
 import { BookService } from './book.service';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
@@ -50,6 +52,15 @@ export class BookController {
     @Param('id') id: number,
   ): Promise<UpdateResult> {
     return this.bookService.updateBook(updateBookDto, id);
+  }
+
+  @Patch('/:id/:status')
+  updateBookStatus(
+    @GetUser() user: UserEntity,
+    @Param('id') id: string,
+    @Param('status') status: BookStatus,
+  ): Promise<BookEntity> {
+    return this.bookService.updateBookStatus(id, status);
   }
 
   @Delete('/:id')
