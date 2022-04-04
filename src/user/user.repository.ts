@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { AuthCredentialsDTO } from './dto/auth.credentials.dto';
 import { UserEntity } from './user.entity';
 import * as crypto from 'crypto-js';
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { SearchUserDTO } from './dto/search.user.dto';
 
 @EntityRepository(UserEntity)
@@ -11,7 +11,11 @@ export class UserRepository extends Repository<UserEntity> {
     const user = new UserEntity();
     user.username = authCredentialsDTO.username;
     user.password = `${crypto.MD5(authCredentialsDTO.password)}`;
-    return await user.save();
+    try {
+      return await user.save();
+    } catch {
+      throw new BadRequestException('Duplicate entry');
+    }
   }
   async signIn(authCredentialsDTO: AuthCredentialsDTO) {
     const { username, password } = authCredentialsDTO;
