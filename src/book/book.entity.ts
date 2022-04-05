@@ -1,6 +1,5 @@
+//import { AuthorEntity } from 'src/author/author.entity';
 import { UserEntity } from 'src/user/user.entity';
-///import { AuthorEntity } from 'src/Author/author.entity';
-
 import {
   BaseEntity,
   Column,
@@ -10,7 +9,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BookStatus } from './book.enum';
+import { BookCategory } from './book.category.enum';
+import { BookStatus } from './book.status.enum';
 
 @Entity('Book')
 export class BookEntity extends BaseEntity {
@@ -31,10 +31,8 @@ export class BookEntity extends BaseEntity {
 
   @ManyToOne((type) => UserEntity, (user) => user.books, {
     eager: false,
-    nullable: true,
   })
-  @JoinTable({})
-  user: UserEntity | null;
+  user: UserEntity;
 
   /*@ManyToOne((type) => AuthorEntity, (authors) => authors.books, {
     eager: false,

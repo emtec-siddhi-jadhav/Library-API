@@ -26,7 +26,7 @@ export class UserController {
 
   @Post('/signup')
   @UsePipes(ValidationPipe)
-  signUp(@Body() authCredentialsDTO: AuthCredentialsDTO): Promise<UserEntity> {
+  signUp(@Body() authCredentialsDTO: AuthCredentialsDTO) {
     return this.userService.signUp(authCredentialsDTO);
   }
 

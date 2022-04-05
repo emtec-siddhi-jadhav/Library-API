@@ -21,7 +21,7 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(authCredentialsDTO: AuthCredentialsDTO): Promise<UserEntity> {
+  async signUp(authCredentialsDTO: AuthCredentialsDTO) {
     return this.userRepository.signUp(authCredentialsDTO);
   }
 
@@ -52,6 +52,7 @@ export class UserService {
       username: updateUserDto.username,
       password: updateUserDto.password,
     };
+    console.log(updateUserData);
     return this.userRepository.update(id, updateUserData);
   }
 

@@ -1,7 +1,6 @@
-import { UserEntity } from 'src/user/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { BookEntity } from './book.entity';
-import { BookStatus } from './book.enum';
+import { BookStatus } from './book.status.enum';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
 
@@ -30,7 +29,6 @@ export class BookRepository extends Repository<BookEntity> {
     book.category = createBookDto.category;
     book.status = BookStatus.Available;
     console.log(book);
-    book.user = null;
     await book.save();
     return book;
   }

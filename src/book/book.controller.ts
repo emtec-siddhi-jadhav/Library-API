@@ -17,7 +17,7 @@ import { GetUser } from 'src/user/get.user.decorators';
 import { UserEntity } from 'src/user/user.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { BookEntity } from './book.entity';
-import { BookStatus } from './book.enum';
+import { BookStatus } from './book.status.enum';
 import { BookService } from './book.service';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';

@@ -14,7 +14,7 @@ export class UserRepository extends Repository<UserEntity> {
     try {
       return await user.save();
     } catch {
-      throw new BadRequestException('Duplicate entry');
+      throw new BadRequestException('user is already exist');
     }
   }
   async signIn(authCredentialsDTO: AuthCredentialsDTO) {

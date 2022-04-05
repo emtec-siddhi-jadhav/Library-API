@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module';
   imports: [
     BookModule,
     UserModule,
+    //AuthorModule,
     TypeOrmModule.forRoot(TypeOrmConfiguration),
   ],
   controllers: [],

@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
-//import { AuthorEntity } from 'src/Author/author.entity';
+import { BookCategory } from '../book.category.enum';
+//import { AuthorEntity } from 'src/author/author.entity';
 export class CreateBookDTO {
   @IsNotEmpty()
   title: string;
