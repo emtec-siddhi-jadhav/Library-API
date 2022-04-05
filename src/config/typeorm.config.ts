@@ -11,7 +11,7 @@ export const TypeOrmConfiguration: TypeOrmModuleOptions = {
   type: 'mssql',
   database: 'library',
   entities: [__dirname + '/../**/*.entity.{ts,js}'],
-  synchronize: true,
+  synchronize: false,
   extra: {
     trustServerCertificate: true,
   },

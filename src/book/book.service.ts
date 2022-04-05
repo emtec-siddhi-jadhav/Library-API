@@ -54,6 +54,6 @@ export class BookService {
     if (result.affected == 0) {
       throw new NotFoundException('book not found');
     }
-    return result.raw.MESSAGES('Deleted');
+    return result;
   }
 }
