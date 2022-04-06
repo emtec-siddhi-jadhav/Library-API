@@ -9,5 +9,5 @@ export class CreateBookDTO {
   author: string;
 
   @IsNotEmpty()
-  category: string;
+  category: BookCategory;
 }

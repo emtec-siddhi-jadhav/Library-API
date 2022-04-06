@@ -17,5 +17,5 @@ export class UpdateBookDTO {
 
   @IsNotEmpty()
   @IsOptional()
-  category: string;
+  category: BookCategory;
 }
