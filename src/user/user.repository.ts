@@ -23,7 +23,7 @@ export class UserRepository extends Repository<UserEntity> {
       throw new BadRequestException('user is already exist');
     }
   }
-  async signIn(authCredentialsDTO: AuthCredentialsDTO) {
+  async signIn(authCredentialsDTO: AuthCredentialsDTO): Promise<UserEntity> {
     const { username, password } = authCredentialsDTO;
     const user = await this.findOne({ username });
     if (!user) {
