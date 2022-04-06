@@ -1,8 +1,12 @@
-import { HttpCode, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 //import { AuthorEntity } from 'src/author/author.entity';
 //import { UserEntity } from 'src/user/user.entity';
-import { DeleteResult, UpdateResult } from 'typeorm';
 import { BookEntity } from './book.entity';
 import { BookStatus } from './book.status.enum';
 import { BookRepository } from './book.repository';
@@ -47,11 +51,17 @@ export class BookService {
     return book;
   }
 
-  async deleteBook(id: number): Promise<DeleteResult> {
+  async deleteBook(id: number) {
     const result = await this.bookRepository.delete(id);
     if (result.affected == 0) {
       throw new NotFoundException('book not found');
     }
-    return result;
+    throw new HttpException(
+      {
+        status: HttpStatus.OK,
+        message: 'Book is deleted',
+      },
+      HttpStatus.OK,
+    );
   }
 }

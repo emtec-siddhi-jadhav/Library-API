@@ -4,7 +4,6 @@ import { UserEntity } from './user.entity';
 import * as crypto from 'crypto-js';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { SearchUserDTO } from './dto/search.user.dto';
-import { JwtPayload } from './jwt.payload';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -13,15 +12,10 @@ export class UserRepository extends Repository<UserEntity> {
     user.username = authCredentialsDTO.username;
     user.password = `${crypto.MD5(authCredentialsDTO.password)}`;
     try {
-      /*const payload: JwtPayload = {
-        username: user.username,
-        id: user.id,
-      };*/
       await user.save();
       delete user.password;
       return user;
-      //return payload;
-    } catch {
+    } catch (err) {
       throw new BadRequestException('user is already exist');
     }
   }

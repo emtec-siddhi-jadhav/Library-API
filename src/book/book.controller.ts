@@ -15,7 +15,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/user/get.user.decorators';
 import { UserEntity } from 'src/user/user.entity';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { BookEntity } from './book.entity';
 import { BookStatus } from './book.status.enum';
 import { BookService } from './book.service';
@@ -61,10 +61,7 @@ export class BookController {
   }
 
   @Delete('/:id')
-  deleteBook(
-    @GetUser() user: UserEntity,
-    @Param('id') id: number,
-  ): Promise<DeleteResult> {
+  deleteBook(@GetUser() user: UserEntity, @Param('id') id: number) {
     return this.bookService.deleteBook(id);
   }
 }
