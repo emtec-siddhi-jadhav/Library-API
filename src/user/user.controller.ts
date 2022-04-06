@@ -57,16 +57,13 @@ export class UserController {
     @GetUser() user: UserEntity,
     @Body() updateUserDto: UpdateUserDTO,
     @Param('id') id: number,
-  ): Promise<UpdateResult> {
+  ) {
     console.log(updateUserDto);
     return this.userService.updateUser(updateUserDto, id);
   }
 
   @Delete('/:id')
-  deleteUser(
-    @GetUser() user: UserEntity,
-    @Param('id') id: number,
-  ): Promise<DeleteResult> {
+  deleteUser(@GetUser() user: UserEntity, @Param('id') id: number) {
     return this.userService.deleteUser(id);
   }
 }
