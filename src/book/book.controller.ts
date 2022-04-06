@@ -47,7 +47,7 @@ export class BookController {
     @GetUser() user: UserEntity,
     @Body() updateBookDto: UpdateBookDTO,
     @Param('id') id: number,
-  ): Promise<UpdateResult> {
+  ) {
     return this.bookService.updateBook(updateBookDto, id);
   }
 
