@@ -9,9 +9,9 @@ export const TypeOrmConfiguration: TypeOrmModuleOptions = {
   port: 1433,
   host: process.env.HOST_KEY,
   type: 'mssql',
-  database: 'library2',
+  database: 'library',
   entities: [__dirname + '/../**/*.entity.{ts,js}'],
-  synchronize: true,
+  synchronize: false,
   extra: {
     trustServerCertificate: true,
   },

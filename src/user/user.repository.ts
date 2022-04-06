@@ -13,12 +13,14 @@ export class UserRepository extends Repository<UserEntity> {
     user.username = authCredentialsDTO.username;
     user.password = `${crypto.MD5(authCredentialsDTO.password)}`;
     try {
-      const payload: JwtPayload = {
+      /*const payload: JwtPayload = {
         username: user.username,
         id: user.id,
-      };
+      };*/
       await user.save();
-      return payload;
+      delete user.password;
+      return user;
+      //return payload;
     } catch {
       throw new BadRequestException('user is already exist');
     }

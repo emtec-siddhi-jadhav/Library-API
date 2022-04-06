@@ -24,7 +24,7 @@ export class BookEntity extends BaseEntity {
   author: string;
 
   @Column()
-  category: string;
+  category: BookCategory;
 
   @Column()
   status: BookStatus;
@@ -32,6 +32,7 @@ export class BookEntity extends BaseEntity {
   @ManyToOne((type) => UserEntity, (user) => user.books, {
     eager: false,
   })
+  @JoinTable({})
   user: UserEntity;
 
   /*@ManyToOne((type) => AuthorEntity, (authors) => authors.books, {
