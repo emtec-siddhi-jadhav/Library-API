@@ -35,19 +35,12 @@ export class BookController {
   }
 
   @Get()
-  getBooks(
-    @GetUser() user: UserEntity,
-    @Query() searchBookDto: SearchBookDTO,
-  ): Promise<BookEntity[]> {
+  getBooks(@Query() searchBookDto: SearchBookDTO): Promise<BookEntity[]> {
     return this.bookService.getBooks(searchBookDto);
   }
 
   @Put('/:id')
-  updateBook(
-    @GetUser() user: UserEntity,
-    @Body() updateBookDto: UpdateBookDTO,
-    @Param('id') id: number,
-  ) {
+  updateBook(@Body() updateBookDto: UpdateBookDTO, @Param('id') id: number) {
     return this.bookService.updateBook(updateBookDto, id);
   }
 
@@ -69,7 +62,7 @@ export class BookController {
   }
 
   @Delete('/:id')
-  deleteBook(@GetUser() user: UserEntity, @Param('id') id: number) {
+  deleteBook(@Param('id') id: number) {
     return this.bookService.deleteBook(id);
   }
 }

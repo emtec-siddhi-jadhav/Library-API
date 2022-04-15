@@ -73,13 +73,14 @@ export class BookRepository extends Repository<BookEntity> {
         },
         HttpStatus.NOT_ACCEPTABLE,
       );
+    } else {
+      book.quantity = await this.bookQuantity(book.quantity);
+      book.status = BookStatus.Issued;
+      //BookUserEntity.userId = issuedBookDto.id;
+      //BookUserEntity.issuedDate = moment().toISOString();
+      //BookUserEntity.returnDate = moment().add(7, 'days').toISOString();
+      return this.save(book);
     }
-    book.status = BookStatus.Issued;
-    book.quantity = await this.bookQuantity(book.quantity);
-    //BookUserEntity.userId = issuedBookDto.id;
-    //BookUserEntity.issuedDate = moment().toISOString();
-    //BookUserEntity.returnDate = moment().add(7, 'days').toISOString();
-    return this.save(book);
   }
 
   async returnBook(user: UserEntity, status: BookStatus, id: number) {
@@ -92,7 +93,7 @@ export class BookRepository extends Repository<BookEntity> {
         book.status = status;
         book.quantity = book.quantity + 1;
         //BookUserEntity.issuedDate = null;
-        //BookUserEntity.returnDate = null;
+        //BookUserEntity.returnDate = moment().toISOString();
       } else {
         throw new HttpException(
           {
