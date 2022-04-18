@@ -14,11 +14,11 @@ export class BookUserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  //@Column()
-  //bookId: number;
+  @Column()
+  bookId: number;
 
-  //@Column()
-  //userId: number;
+  @Column()
+  userId: number;
 
   @Column()
   issuedDate: string;

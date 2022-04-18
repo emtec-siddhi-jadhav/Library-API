@@ -5,12 +5,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BookUserEntity } from 'src/BookUserBook/book.user.entity';
 import { UserEntity } from 'src/user/user.entity';
 import { BookEntity } from './book.entity';
 import { BookRepository } from './book.repository';
-import { BookStatus } from './book.status.enum';
 import { CreateBookDTO } from './dto/create.book.dto';
-import { issuedBookDTO } from './dto/issued.book.dto';
+import { IssuedBookDTO } from './dto/issued.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
 import { UpdateBookDTO } from './dto/update.book.dto';
 
@@ -46,18 +46,18 @@ export class BookService {
   }
 
   async issuedBook(
-    issuedBookDto: issuedBookDTO,
+    issuedBookDto: IssuedBookDTO,
     id: number,
-  ): Promise<BookEntity> {
+  ): Promise<BookUserEntity> {
     return this.bookRepository.issuedBook(issuedBookDto, id);
   }
 
   async returnBook(
+    issuedBookDto: IssuedBookDTO,
     id: number,
     user: UserEntity,
-    status: BookStatus,
   ): Promise<BookEntity> {
-    return this.bookRepository.returnBook(user, status, id);
+    return this.bookRepository.returnBook(issuedBookDto, user, id);
   }
 
   async deleteBook(id: number) {

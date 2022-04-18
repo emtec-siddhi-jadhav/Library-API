@@ -1,3 +1,3 @@
-export class issuedBookDTO {
+export class IssuedBookDTO {
   id: number;
 }

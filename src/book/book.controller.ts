@@ -17,9 +17,8 @@ import { GetUser } from 'src/user/get.user.decorators';
 import { UserEntity } from 'src/user/user.entity';
 import { BookEntity } from './book.entity';
 import { BookService } from './book.service';
-import { BookStatus } from './book.status.enum';
 import { CreateBookDTO } from './dto/create.book.dto';
-import { issuedBookDTO } from './dto/issued.book.dto';
+import { IssuedBookDTO } from './dto/issued.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
 import { UpdateBookDTO } from './dto/update.book.dto';
 
@@ -45,20 +44,17 @@ export class BookController {
   }
 
   @Patch('/:id')
-  issuedBook(
-    @Param('id') id: number,
-    @Body() issuedBookDto: issuedBookDTO,
-  ): Promise<BookEntity> {
+  issuedBook(@Param('id') id: number, @Body() issuedBookDto: IssuedBookDTO) {
     return this.bookService.issuedBook(issuedBookDto, id);
   }
 
-  @Patch('/:id/:status')
+  @Patch('/:id')
   returnBook(
     @Param('id') id: number,
-    @Param('status') status: BookStatus,
     @GetUser() user: UserEntity,
+    @Body() issuedBookDto: IssuedBookDTO,
   ): Promise<BookEntity> {
-    return this.bookService.returnBook(id, user, status);
+    return this.bookService.returnBook(issuedBookDto, id, user);
   }
 
   @Delete('/:id')
