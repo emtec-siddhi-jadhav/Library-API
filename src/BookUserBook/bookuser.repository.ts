@@ -29,12 +29,4 @@ export class BookUserRepository extends Repository<BookUserEntity> {
     });
     return this.save(bookuser);
   }
-
-  async returnBook(issuedBookDto: IssuedBookDTO, id: number) {
-    const bookuser = await this.findOne(id);
-    if (bookuser.userId === issuedBookDto.id && bookuser.bookId === id) {
-      this.delete(bookuser.id);
-    }
-    return this.save(bookuser);
-  }
 }

@@ -11,6 +11,7 @@ import { CreateBookDTO } from './dto/create.book.dto';
 import { IssuedBookDTO } from './dto/issued.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
 import { BookUserRepository } from 'src/BookUserBook/bookuser.repository';
+import { ReturnBookDTO } from './dto/return.book.dto';
 
 @EntityRepository(BookEntity)
 export class BookRepository extends Repository<BookEntity> {
@@ -63,20 +64,30 @@ export class BookRepository extends Repository<BookEntity> {
     return bookUserRepository.save(bookuser);
   }
 
-  async returnBook(issuedBookDto: IssuedBookDTO, user: UserEntity, id: number) {
-    const book = await this.findOne(id);
+  async returnBook(returnBookDto: ReturnBookDTO, user: UserEntity) {
+    const book = await this.findOne(returnBookDto.bookId);
     if (!book) {
       throw new NotFoundException('book not found');
     }
+    const result = await this.checkIssuedBookWithUser(
+      returnBookDto.userId,
+      returnBookDto.bookId,
+    );
     if (user.userId == 1) {
-      const bookUserRepository = getCustomRepository(BookUserRepository);
-      const bookuser = await bookUserRepository.returnBook(issuedBookDto, id);
-      if (bookuser != null) {
+      if (result) {
+        await this.delete(id);
         book.quantity = book.quantity + 1;
+        return this.save(book);
       }
-      return this.save(book);
     } else {
       throw new UnauthorizedException('Only admin can return the book');
+    }
+  }
+
+  async checkIssuedBookWithUser(bookId: number, userId: number) {
+    const bookuser = await this.find({ where: { bookId, userId } });
+    if (bookuser.length != 0) {
+      return bookuser;
     }
   }
 }

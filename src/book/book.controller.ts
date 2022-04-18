@@ -19,6 +19,7 @@ import { BookEntity } from './book.entity';
 import { BookService } from './book.service';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { IssuedBookDTO } from './dto/issued.book.dto';
+import { ReturnBookDTO } from './dto/return.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
 import { UpdateBookDTO } from './dto/update.book.dto';
 
@@ -48,13 +49,12 @@ export class BookController {
     return this.bookService.issuedBook(issuedBookDto, id);
   }
 
-  @Patch('/:id')
+  @Patch()
   returnBook(
-    @Param('id') id: number,
     @GetUser() user: UserEntity,
-    @Body() issuedBookDto: IssuedBookDTO,
-  ): Promise<BookEntity> {
-    return this.bookService.returnBook(issuedBookDto, id, user);
+    @Body() returnBookDto: ReturnBookDTO,
+  ) {
+    return this.bookService.returnBook(returnBookDto, user);
   }
 
   @Delete('/:id')

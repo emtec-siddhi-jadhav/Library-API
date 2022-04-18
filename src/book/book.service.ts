@@ -11,6 +11,7 @@ import { BookEntity } from './book.entity';
 import { BookRepository } from './book.repository';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { IssuedBookDTO } from './dto/issued.book.dto';
+import { ReturnBookDTO } from './dto/return.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
 import { UpdateBookDTO } from './dto/update.book.dto';
 
@@ -52,12 +53,8 @@ export class BookService {
     return this.bookRepository.issuedBook(issuedBookDto, id);
   }
 
-  async returnBook(
-    issuedBookDto: IssuedBookDTO,
-    id: number,
-    user: UserEntity,
-  ): Promise<BookEntity> {
-    return this.bookRepository.returnBook(issuedBookDto, user, id);
+  async returnBook(returnBookDto: ReturnBookDTO, user: UserEntity) {
+    return this.bookRepository.returnBook(returnBookDto, user);
   }
 
   async deleteBook(id: number) {
