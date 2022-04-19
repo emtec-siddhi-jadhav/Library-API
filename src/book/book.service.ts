@@ -41,6 +41,7 @@ export class BookService {
       title: updateBookDto.title,
       author: updateBookDto.author,
       category: updateBookDto.category,
+      quantity: updateBookDto.quantity,
     };
     await this.bookRepository.update(id, updateData);
     return updateBookDto;
