@@ -49,7 +49,7 @@ export class BookController {
     return this.bookService.issuedBook(issuedBookDto, id);
   }
 
-  @Patch()
+  @Delete()
   returnBook(
     @GetUser() user: UserEntity,
     @Body() returnBookDto: ReturnBookDTO,

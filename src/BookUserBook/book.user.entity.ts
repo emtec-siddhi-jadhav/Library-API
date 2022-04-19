@@ -3,6 +3,7 @@ import { UserEntity } from 'src/user/user.entity';
 
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -33,4 +34,7 @@ export class BookUserEntity {
   @ManyToOne(() => UserEntity, (user) => user.bookUsers)
   @JoinColumn({ name: 'userId' })
   user: UserEntity;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

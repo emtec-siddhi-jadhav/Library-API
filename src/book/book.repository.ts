@@ -69,25 +69,13 @@ export class BookRepository extends Repository<BookEntity> {
     if (!book) {
       throw new NotFoundException('book not found');
     }
-    const result = await this.checkIssuedBookWithUser(
-      returnBookDto.userId,
-      returnBookDto.bookId,
-    );
     if (user.userId == 1) {
-      if (result) {
-        await this.delete(id);
-        book.quantity = book.quantity + 1;
-        return this.save(book);
-      }
+      const bookUserRepository = getCustomRepository(BookUserRepository);
+      await bookUserRepository.returnBook(returnBookDto);
+      book.quantity = book.quantity + 1;
+      return await this.save(book);
     } else {
       throw new UnauthorizedException('Only admin can return the book');
-    }
-  }
-
-  async checkIssuedBookWithUser(bookId: number, userId: number) {
-    const bookuser = await this.find({ where: { bookId, userId } });
-    if (bookuser.length != 0) {
-      return bookuser;
     }
   }
 }
