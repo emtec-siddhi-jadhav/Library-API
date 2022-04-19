@@ -20,11 +20,14 @@ export class BookUserRepository extends Repository<BookUserEntity> {
     }
   }
 
-  async issuedBook(issuedBookDto: IssuedBookDTO, id: number) {
-    await this.validateIssuedBookWithUser(issuedBookDto.id, id);
+  async issuedBook(issuedBookDto: IssuedBookDTO) {
+    await this.validateIssuedBookWithUser(
+      issuedBookDto.userId,
+      issuedBookDto.bookId,
+    );
     const bookuser = this.create({
-      userId: issuedBookDto.id,
-      bookId: id,
+      userId: issuedBookDto.userId,
+      bookId: issuedBookDto.bookId,
       issuedDate: moment().toISOString(),
       returnDate: moment().add(7, 'days').toISOString(),
     });
@@ -43,7 +46,6 @@ export class BookUserRepository extends Repository<BookUserEntity> {
       returnBookDto.bookId,
       returnBookDto.userId,
     );
-    console.log(result);
     await this.softDelete(result);
   }
 }

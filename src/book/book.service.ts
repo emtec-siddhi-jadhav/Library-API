@@ -46,11 +46,8 @@ export class BookService {
     return updateBookDto;
   }
 
-  async issuedBook(
-    issuedBookDto: IssuedBookDTO,
-    id: number,
-  ): Promise<BookUserEntity> {
-    return this.bookRepository.issuedBook(issuedBookDto, id);
+  async issuedBook(issuedBookDto: IssuedBookDTO): Promise<BookUserEntity> {
+    return this.bookRepository.issuedBook(issuedBookDto);
   }
 
   async returnBook(returnBookDto: ReturnBookDTO, user: UserEntity) {

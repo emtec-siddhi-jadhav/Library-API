@@ -44,9 +44,9 @@ export class BookController {
     return this.bookService.updateBook(updateBookDto, id);
   }
 
-  @Patch('/:id')
-  issuedBook(@Param('id') id: number, @Body() issuedBookDto: IssuedBookDTO) {
-    return this.bookService.issuedBook(issuedBookDto, id);
+  @Patch()
+  issuedBook(@Body() issuedBookDto: IssuedBookDTO) {
+    return this.bookService.issuedBook(issuedBookDto);
   }
 
   @Delete()
