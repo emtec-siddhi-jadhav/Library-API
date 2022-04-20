@@ -22,17 +22,14 @@ export class BookService {
     private bookRepository: BookRepository,
   ) {}
 
-  //return all books
   async getBooks(searchBookDto: SearchBookDTO): Promise<BookEntity[]> {
     return this.bookRepository.getBooks(searchBookDto);
   }
 
-  //creating a new book
   async createBook(createBookDto: CreateBookDTO): Promise<BookEntity> {
     return this.bookRepository.createBook(createBookDto);
   }
 
-  //updating a book
   async updateBook(
     updateBookDto: UpdateBookDTO,
     id: number,
