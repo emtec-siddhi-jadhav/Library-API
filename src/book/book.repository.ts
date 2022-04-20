@@ -12,6 +12,7 @@ import { IssuedBookDTO } from './dto/issued.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
 import { BookUserRepository } from 'src/BookUserBook/bookuser.repository';
 import { ReturnBookDTO } from './dto/return.book.dto';
+import { UpdateBookDTO } from './dto/update.book.dto';
 
 @EntityRepository(BookEntity)
 export class BookRepository extends Repository<BookEntity> {
@@ -77,5 +78,39 @@ export class BookRepository extends Repository<BookEntity> {
     } else {
       throw new UnauthorizedException('Only admin can return the book');
     }
+  }
+
+  async updateBook(updateBookDto: UpdateBookDTO, id: number) {
+    const book = await this.findOne(id);
+    const OldData = {
+      title: book.title,
+      author: book.author,
+      category: book.category,
+      quantity: book.quantity,
+    };
+    console.log(OldData);
+    const updateData = {
+      title: updateBookDto.title,
+      author: updateBookDto.author,
+      category: updateBookDto.category,
+      quantity: updateBookDto.quantity,
+    };
+    if (updateData.title == null) {
+      updateData.title = OldData.title;
+    }
+
+    if (updateData.author == null) {
+      updateData.author = OldData.author;
+    }
+
+    if (updateData.category == null) {
+      updateData.category = OldData.category;
+    }
+
+    if (updateData.quantity == null) {
+      updateData.quantity = OldData.quantity;
+    }
+    await this.update(id, updateData);
+    return updateData;
   }
 }

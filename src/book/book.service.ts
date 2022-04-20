@@ -37,14 +37,7 @@ export class BookService {
     updateBookDto: UpdateBookDTO,
     id: number,
   ): Promise<UpdateBookDTO> {
-    const updateData = {
-      title: updateBookDto.title,
-      author: updateBookDto.author,
-      category: updateBookDto.category,
-      quantity: updateBookDto.quantity,
-    };
-    await this.bookRepository.update(id, updateData);
-    return updateBookDto;
+    return this.bookRepository.updateBook(updateBookDto, id);
   }
 
   async issuedBook(issuedBookDto: IssuedBookDTO): Promise<BookUserEntity> {
