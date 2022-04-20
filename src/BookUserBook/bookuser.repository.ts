@@ -38,6 +38,14 @@ export class BookUserRepository extends Repository<BookUserEntity> {
     const bookuser = await this.find({ where: { bookId, userId } });
     if (bookuser.length != 0) {
       return bookuser[0];
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: `Book with id ${bookId} not issued to user ${userId}`,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
   }
 
@@ -48,14 +56,6 @@ export class BookUserRepository extends Repository<BookUserEntity> {
     );
     if (result) {
       await this.softDelete(result);
-    } else {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_ACCEPTABLE,
-          message: 'Book is already returned by the user',
-        },
-        HttpStatus.NOT_ACCEPTABLE,
-      );
     }
   }
 }
