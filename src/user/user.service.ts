@@ -7,13 +7,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredentialsDTO } from './dto/auth.credentials.dto';
 import { SearchUserDTO } from './dto/search.user.dto';
 import { UpdateUserDTO } from './dto/update.user.dto';
 import { JwtPayload } from './jwt.payload';
 import { UserEntity } from './user.entity';
 import { UserRepository } from './user.repository';
-import * as crypto from 'crypto-js';
+import { AuthCredentialsSignUpDTO } from './dto/auth.credentials.signup.dto';
+import { AuthCredentialsSignInDTO } from './dto/auth.credentials.signin.dto';
 
 @Injectable()
 export class UserService {
@@ -23,18 +23,17 @@ export class UserService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(authCredentialsDTO: AuthCredentialsDTO) {
-    return this.userRepository.signUp(authCredentialsDTO);
+  async signUp(authCredentialsSignUpDTO: AuthCredentialsSignUpDTO) {
+    return this.userRepository.signUp(authCredentialsSignUpDTO);
   }
 
-  async signIn(authCredentialsDTO: AuthCredentialsDTO) {
-    const user = await this.userRepository.signIn(authCredentialsDTO);
+  async signIn(authCredentialsSignInDTO: AuthCredentialsSignInDTO) {
+    const user = await this.userRepository.signIn(authCredentialsSignInDTO);
     if (!user) {
       throw new UnauthorizedException('user is not authorized');
     } else {
-      //creating jwt token
       const payload: JwtPayload = {
-        username: user.username,
+        email: user.email,
         userId: user.userId,
       };
       const token = this.jwtService.sign(payload);
@@ -47,20 +46,7 @@ export class UserService {
   }
 
   async updateUser(updateUserDto: UpdateUserDTO, id: number) {
-    const updateUserData = {
-      username: updateUserDto.username,
-      password: `${crypto.MD5(updateUserDto.password)}`,
-    };
-    console.log(updateUserData);
-    await this.userRepository.update(id, updateUserData);
-    if (updateUserData) {
-      throw new HttpException(
-        {
-          message: 'User data is updated',
-        },
-        HttpStatus.OK,
-      );
-    }
+    return this.userRepository.updateUser(updateUserDto, id);
   }
 
   async deleteUser(id: number) {
@@ -75,5 +61,9 @@ export class UserService {
       },
       HttpStatus.OK,
     );
+  }
+
+  async sendEmail() {
+    return this.userRepository.sendEmail();
   }
 }

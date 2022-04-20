@@ -9,16 +9,19 @@ import * as crypto from 'crypto-js';
 import { BookUserEntity } from 'src/BookUserBook/book.user.entity';
 
 @Entity('User')
-@Unique(['username'])
+@Unique(['email'])
 export class UserEntity {
   @PrimaryGeneratedColumn()
   userId: number;
 
   @Column()
-  username: string;
+  email: string;
 
   @Column()
   password: string;
+
+  @Column()
+  username: string;
 
   @OneToMany(() => BookUserEntity, (bookUser) => bookUser.user, { eager: true })
   bookUsers: BookUserEntity[];

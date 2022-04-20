@@ -1,9 +1,9 @@
 import { IsNotEmpty, MinLength } from 'class-validator';
 
-export class AuthCredentialsDTO {
+export class AuthCredentialsSignInDTO {
   @IsNotEmpty()
   @MinLength(5)
-  username: string;
+  email: string;
 
   @IsNotEmpty()
   @MinLength(5)

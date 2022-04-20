@@ -1,12 +1,15 @@
-import { Exclude } from 'class-transformer';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateUserDTO {
   @IsNotEmpty()
   @IsOptional()
-  username: string;
+  email: string;
 
   @IsNotEmpty()
   @IsOptional()
   password: string;
+
+  @IsNotEmpty()
+  @IsOptional()
+  username: string;
 }
