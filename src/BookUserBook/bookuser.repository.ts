@@ -46,6 +46,16 @@ export class BookUserRepository extends Repository<BookUserEntity> {
       returnBookDto.bookId,
       returnBookDto.userId,
     );
-    await this.softDelete(result);
+    if (result) {
+      await this.softDelete(result);
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_ACCEPTABLE,
+          message: 'Book is already returned by the user',
+        },
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
   }
 }
