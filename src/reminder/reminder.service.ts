@@ -5,13 +5,8 @@ import { getCustomRepository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../user/user.repository';
 import { BookRepository } from '../book/book.repository';
-import { BookEntity } from '../book/book.entity';
-import { UserEntity } from '../user/user.entity';
 import { EmailService } from 'src/email/email.service';
-interface EmailData {
-  book: BookEntity;
-  user: UserEntity;
-}
+
 @Injectable()
 export class ReminderService {
   constructor(
@@ -24,7 +19,7 @@ export class ReminderService {
     private emailService: EmailService,
   ) {}
 
-  @Cron('* * * * *')
+  @Cron('0 10 * * *')
   async run() {
     const bookUserRepository = getCustomRepository(BookUserRepository);
     const records = await bookUserRepository.mailReceivers();
