@@ -66,7 +66,7 @@ export class ReminderService {
         to: record.user.email,
         subject: 'Reminder for returning the book',
         text: 'Hello Reader',
-        html: `<p>Hello ${record.user.username}, you have following book to be returned </p><br>
+        html: `<p>Hello ${record.user.username}, you have following book to be returned </p>
         <b>book - ${record.book.title}</b>`,
       });
       console.log('Message sent: %s', info.messageId);
