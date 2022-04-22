@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   OneToMany,
@@ -7,22 +6,25 @@ import {
   Unique,
 } from 'typeorm';
 import * as crypto from 'crypto-js';
-import { BookEntity } from 'src/book/book.entity';
+import { BookUserEntity } from 'src/BookUserBook/book.user.entity';
 
 @Entity('User')
-@Unique(['username'])
-export class UserEntity extends BaseEntity {
+@Unique(['email'])
+export class UserEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  userId: number;
 
   @Column()
-  username: string;
+  email: string;
 
   @Column()
   password: string;
 
-  @OneToMany((type) => BookEntity, (book) => book.user, { eager: true })
-  books: BookEntity[];
+  @Column()
+  username: string;
+
+  @OneToMany(() => BookUserEntity, (bookUser) => bookUser.user, { eager: true })
+  bookUsers: BookUserEntity[];
 
   validatePassword(password: string) {
     const encrypted = `${crypto.MD5(password)}`;
