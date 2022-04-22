@@ -11,8 +11,6 @@ import { UserEntity } from './user.entity';
 import { AuthCredentialsSignUpDTO } from './dto/auth.credentials.signup.dto';
 import { AuthCredentialsSignInDTO } from './dto/auth.credentials.signin.dto';
 import { UpdateUserDTO } from './dto/update.user.dto';
-import nodemailer from 'nodemailer';
-import cron from 'node-cron';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -34,6 +32,7 @@ export class UserRepository extends Repository<UserEntity> {
   ): Promise<UserEntity> {
     const { email, password } = authCredentialsSignInDTO;
     const user = await this.findOne({ email });
+    console.log(user);
     if (!user) {
       throw new UnauthorizedException('user is not authorized');
     }
@@ -44,13 +43,13 @@ export class UserRepository extends Repository<UserEntity> {
   }
 
   async getUsers(searchUserDto: SearchUserDTO): Promise<UserEntity[]> {
-    const { search } = searchUserDto;
     const query = this.createQueryBuilder('user');
-    if (search) {
+    /*if (search) {
       query.andWhere(`(user.id LIKE :search) OR (user.username LIKE :search)`, {
         search: `%${search}%`,
       });
-    }
+    }*/
+    query.select(['user.userId', 'user.email', 'user.username']).execute();
     return await query.getMany();
   }
 
@@ -69,11 +68,9 @@ export class UserRepository extends Repository<UserEntity> {
     if (updateUserData.email == null) {
       updateUserData.email = OldData.email;
     }
-
     if (updateUserData.username == null) {
       updateUserData.username = OldData.username;
     }
-
     if (updateUserData.password == null) {
       updateUserData.password = OldData.password;
     }
@@ -88,35 +85,13 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
-  async sendEmail() {
-    const testAccount = await nodemailer.createTestAccount();
-
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
-
-    const mailOption = await transporter.sendMail({
-      from: 'admin@gmail.com',
-      to: '',
-      subject: 'Reminder',
-      text: 'You have to returned the book upto tomorrow',
-      html: '<b>Hello Reader</b>',
-    });
-
-    cron.schedule('0 10 * * *', () => {
-      transporter.sendMail(mailOption, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-    });
+  async mails(userId: number[]) {
+    const query = this.createQueryBuilder('user');
+    query
+      .select('user.email')
+      .where('user.userId= :userId', { userId: { $in: userId } })
+      .execute();
+    const mails = await query.getMany();
+    return mails;
   }
 }

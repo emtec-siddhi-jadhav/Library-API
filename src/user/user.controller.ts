@@ -62,10 +62,4 @@ export class UserController {
   deleteUser(@Param('id') id: number) {
     return this.userService.deleteUser(id);
   }
-
-  @Post('/:sendemail')
-  @UseGuards(AuthGuard())
-  sendEmail() {
-    return this.userService.sendEmail();
-  }
 }

@@ -62,8 +62,4 @@ export class UserService {
       HttpStatus.OK,
     );
   }
-
-  async sendEmail() {
-    return this.userRepository.sendEmail();
-  }
 }
