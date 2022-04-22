@@ -10,7 +10,7 @@ import { BookEntity } from './book.entity';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { IssuedBookDTO } from './dto/issued.book.dto';
 import { SearchBookDTO } from './dto/search.book.dto';
-import { BookUserRepository } from 'src/BookUserBook/bookuser.repository';
+import { BookUserRepository } from '../BookUserBook/bookuser.repository';
 import { ReturnBookDTO } from './dto/return.book.dto';
 import { UpdateBookDTO } from './dto/update.book.dto';
 

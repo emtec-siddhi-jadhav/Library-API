@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { BookModule } from 'src/book/book.module';
-import { UserModule } from 'src/user/user.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BookRepository } from 'src/book/book.repository';
+import { UserRepository } from 'src/user/user.repository';
 import { ReminderService } from './Reminder.service';
 
 @Module({
-  imports: [UserModule, BookModule],
+  imports: [TypeOrmModule.forFeature([UserRepository, BookRepository])],
   controllers: [],
   providers: [ReminderService],
 })

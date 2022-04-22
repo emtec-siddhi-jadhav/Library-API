@@ -84,14 +84,4 @@ export class UserRepository extends Repository<UserEntity> {
       );
     }
   }
-
-  async mails(userId: number[]) {
-    const query = this.createQueryBuilder('user');
-    query
-      .select('user.email')
-      .where('user.userId= :userId', { userId: { $in: userId } })
-      .execute();
-    const mails = await query.getMany();
-    return mails;
-  }
 }
