@@ -13,8 +13,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/user/get.user.decorators';
-import { UserEntity } from 'src/user/user.entity';
+import { GetUser } from '../user/get.user.decorators';
+import { UserEntity } from '../user/user.entity';
 import { BookEntity } from './book.entity';
 import { BookService } from './book.service';
 import { CreateBookDTO } from './dto/create.book.dto';

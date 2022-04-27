@@ -6,7 +6,6 @@ import {
   HttpStatus,
   UnauthorizedException,
 } from '@nestjs/common';
-import { SearchUserDTO } from './dto/search.user.dto';
 import { UserEntity } from './user.entity';
 import { AuthCredentialsSignUpDTO } from './dto/auth.credentials.signup.dto';
 import { AuthCredentialsSignInDTO } from './dto/auth.credentials.signin.dto';
@@ -42,13 +41,8 @@ export class UserRepository extends Repository<UserEntity> {
     return user;
   }
 
-  async getUsers(searchUserDto: SearchUserDTO): Promise<UserEntity[]> {
+  async getUsers(): Promise<UserEntity[]> {
     const query = this.createQueryBuilder('user');
-    /*if (search) {
-      query.andWhere(`(user.id LIKE :search) OR (user.username LIKE :search)`, {
-        search: `%${search}%`,
-      });
-    }*/
     query.select(['user.userId', 'user.email', 'user.username']).execute();
     return await query.getMany();
   }

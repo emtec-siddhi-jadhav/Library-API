@@ -5,7 +5,7 @@ import { getCustomRepository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../user/user.repository';
 import { BookRepository } from '../book/book.repository';
-import { EmailService } from 'src/email/email.service';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class ReminderService {
@@ -37,7 +37,7 @@ export class ReminderService {
       };
     });
     console.log(
-      `there are ${data.length} users who will receive mail for returning the book`,
+      `there are ${data.length} users who will receive reminder for returning the book`,
     );
     await data.map(async (record) => {
       await this.emailService.sendEmail(record);

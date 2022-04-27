@@ -29,9 +29,15 @@ $ npm run start:dev
 - User signIn
 - Get users
 - User profile
+- Update User info
+- Delete User info
 
 ## Book module functionalities
 - Create book
 - Get books
+- Update book
+- Delete book
+- Issued book
+- Return book
 
 

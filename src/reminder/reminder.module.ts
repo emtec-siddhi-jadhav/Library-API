@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BookRepository } from 'src/book/book.repository';
-import { EmailService } from 'src/email/email.service';
-import { UserRepository } from 'src/user/user.repository';
+import { BookRepository } from '../book/book.repository';
+import { EmailService } from '../email/email.service';
+import { UserRepository } from '../user/user.repository';
 import { ReminderService } from './Reminder.service';
 
 @Module({

@@ -6,7 +6,7 @@ import {
   Unique,
 } from 'typeorm';
 import * as crypto from 'crypto-js';
-import { BookUserEntity } from 'src/BookUserBook/book.user.entity';
+import { BookUserEntity } from '../BookUserBook/book.user.entity';
 
 @Entity('User')
 @Unique(['email'])
