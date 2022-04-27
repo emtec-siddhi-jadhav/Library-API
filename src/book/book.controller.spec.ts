@@ -4,6 +4,8 @@ import { BookService } from './book.service';
 import { mock } from 'jest-mock-extended';
 import { CreateBookDTO } from './dto/create.book.dto';
 import { BookCategory } from './book.category.enum';
+import { SearchBookDTO } from './dto/search.book.dto';
+import { UpdateBookDTO } from './dto/update.book.dto';
 
 describe('BookController', () => {
   let controller: BookController;
@@ -26,30 +28,62 @@ describe('BookController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
-  it('case 1', async () => {
-    //prepare
-    const bookInput: CreateBookDTO = {
-      title: 'Secret Wishlist',
-      author: 'Mr ABC',
-      category: BookCategory.Romantic,
-      quantity: 10,
-    };
 
-    mockBookService.createBook.mockResolvedValue({
-      bookId: 1,
-      title: 'Secret Wishlist',
-      author: 'Mr ABC',
-      category: BookCategory.Romantic,
-      quantity: 10,
-      bookUsers: null,
+  describe('createBook', () => {
+    it('case 1', async () => {
+      //prepare
+      const bookInput: CreateBookDTO = {
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+      };
+
+      mockBookService.createBook.mockResolvedValue({
+        bookId: 1,
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+        bookUsers: null,
+      });
+
+      //call
+      const result = await controller.createBook(bookInput);
+
+      //assert
+      expect(result.title).toEqual(bookInput.title);
+      expect(result.author).toEqual(bookInput.author);
+      expect(result.category).toEqual(bookInput.category);
+      expect(result.quantity).toEqual(bookInput.quantity);
     });
+  });
 
-    //call
-    const res = await controller.createBook(bookInput);
+  describe('updateBook', () => {
+    it('case 1', async () => {
+      //prepare
+      const bookInput: UpdateBookDTO = {
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+      };
 
-    //assert
-    expect(res.title).toEqual(bookInput.title);
-    expect(res.author).toEqual(bookInput.author);
-    expect(res.quantity).toEqual(bookInput.quantity);
+      mockBookService.updateBook.mockResolvedValue({
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+      });
+
+      //call
+      const result = await controller.updateBook(bookInput, 2);
+
+      //assert
+      expect(result.title).toEqual(bookInput.title);
+      expect(result.author).toEqual(bookInput.author);
+      expect(result.category).toEqual(bookInput.category);
+      expect(result.quantity).toEqual(bookInput.quantity);
+    });
   });
 });
