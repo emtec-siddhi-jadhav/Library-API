@@ -136,4 +136,22 @@ describe('BookService', () => {
       expect(result).toEqual(bookInput);
     });
   });
+
+  // describe('deleteBook', () => {
+  //   it('case 1: check if user is admin', async () => {
+  //     const userEntity: UserEntity = {
+  //       username: 'user',
+  //       email: 'user@gmail.com',
+  //       password: 'user',
+  //       userId: 1,
+  //       bookUsers: null,
+  //       validatePassword: function (password: string): boolean {
+  //         const encrypted = `${crypto.MD5(password)}`;
+  //         return encrypted == this.password;
+  //       },
+  //     };
+  //     const result = await service.deleteBook(userEntity, 2);
+  //     expect(result).toEqual(1);
+  //   });
+  // });
 });

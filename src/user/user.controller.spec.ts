@@ -4,6 +4,7 @@ import { AuthCredentialsSignUpDTO } from './dto/auth.credentials.signup.dto';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import * as crypto from 'crypto-js';
+import { AuthCredentialsSignInDTO } from './dto/auth.credentials.signin.dto';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -52,4 +53,17 @@ describe('UserController', () => {
       expect(result.username).toEqual(userCredentials.username);
     });
   });
+
+  // describe('signIn', () => {
+  //   it('case 1: user registered successfully', async () => {
+  //     const userCredentials: AuthCredentialsSignInDTO = {
+  //       email: 'admin@gmail.com',
+  //       password: 'test1',
+  //     };
+
+  //     mockUserService.signIn.mockResolvedValue({});
+
+  //     const result = await controller.signIn(userCredentials);
+  //   });
+  // });
 });

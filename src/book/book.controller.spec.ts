@@ -255,7 +255,17 @@ describe('BookController', () => {
   //       bookId: 1,
   //       userId: 2,
   //     };
-
+  //     const userEntity: UserEntity = {
+  //       username: 'user',
+  //       email: 'user@gmail.com',
+  //       password: 'user',
+  //       userId: 1,
+  //       bookUsers: null,
+  //       validatePassword: function (password: string): boolean {
+  //         const encrypted = `${crypto.MD5(password)}`;
+  //         return encrypted == this.password;
+  //       },
+  //     };
   //     mockBookService.returnBook.mockResolvedValue({
   //       title: 'test',
   //       author: 'ABC',
@@ -265,9 +275,8 @@ describe('BookController', () => {
   //       bookUsers: null,
   //     });
 
-  //     const result = await controller.returnBook( ,input);
-  //     expect(result).toEqual();
-
+  //     const result = await controller.returnBook(userEntity, input);
+  //     expect(result.bookId).toEqual(input.bookId);
   //   });
   // });
 
