@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import * as crypto from 'crypto-js';
 import { BookUserEntity } from '../BookUserBook/book.user.entity';
+import { IsOptional } from 'class-validator';
 
 @Entity('User')
 @Unique(['email'])
@@ -26,6 +27,7 @@ export class UserEntity {
   @OneToMany(() => BookUserEntity, (bookUser) => bookUser.user, { eager: true })
   bookUsers: BookUserEntity[];
 
+  //@IsOptional()
   validatePassword(password: string) {
     const encrypted = `${crypto.MD5(password)}`;
     return encrypted == this.password;

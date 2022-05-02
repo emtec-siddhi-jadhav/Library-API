@@ -9,6 +9,9 @@ import { UpdateBookDTO } from './dto/update.book.dto';
 import { IssuedBookDTO } from './dto/issued.book.dto';
 import moment from 'moment';
 import { BookEntity } from './book.entity';
+import { ReturnBookDTO } from './dto/return.book.dto';
+import { UserEntity } from '../user/user.entity';
+import * as crypto from 'crypto-js';
 
 describe('BookController', () => {
   let controller: BookController;
@@ -33,7 +36,7 @@ describe('BookController', () => {
   });
 
   describe('createBook', () => {
-    it('case 1: create a new book', async () => {
+    it('case 1: create a new book successfully', async () => {
       //prepare
       const bookInput: CreateBookDTO = {
         title: 'Secret Wishlist',
@@ -41,7 +44,17 @@ describe('BookController', () => {
         category: BookCategory.Romantic,
         quantity: 10,
       };
-
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
       mockBookService.createBook.mockResolvedValue({
         bookId: 1,
         title: 'Secret Wishlist',
@@ -50,9 +63,8 @@ describe('BookController', () => {
         quantity: 10,
         bookUsers: null,
       });
-
       //call
-      const result = await controller.createBook(bookInput);
+      const result = await controller.createBook(userEntity, bookInput);
 
       //assert
       expect(result.title).toEqual(bookInput.title);
@@ -60,10 +72,47 @@ describe('BookController', () => {
       expect(result.category).toEqual(bookInput.category);
       expect(result.quantity).toEqual(bookInput.quantity);
     });
+
+    it('case 2: Book is not created', async () => {
+      //prepare
+      const bookInput: CreateBookDTO = {
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+      };
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
+      mockBookService.createBook.mockRejectedValue({
+        bookId: 1,
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+        bookUsers: null,
+      });
+      //call
+      const error = new Error('test-error book is not created');
+      mockBookService.createBook.mockRejectedValue(error);
+
+      //assert
+      expect(controller.createBook(userEntity, bookInput)).rejects.toThrowError(
+        'book is not created',
+      );
+    });
   });
 
   describe('getBooks', () => {
-    it('case 1: Return books', async () => {
+    it('case 1: Return books successfully', async () => {
       //prepare
       const bookInput: SearchBookDTO = {
         search: 'ABC',
@@ -91,7 +140,7 @@ describe('BookController', () => {
   });
 
   describe('updateBook', () => {
-    it('case 1: Update book', async () => {
+    it('case 1: Book info updated successfully', async () => {
       //prepare
       const bookInput: UpdateBookDTO = {
         title: 'Secret Wishlist',
@@ -100,6 +149,17 @@ describe('BookController', () => {
         quantity: 10,
       };
 
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
       mockBookService.updateBook.mockResolvedValue({
         title: 'Secret Wishlist',
         author: 'Mr ABC',
@@ -108,10 +168,47 @@ describe('BookController', () => {
       });
 
       //call
-      const result = await controller.updateBook(bookInput, 2);
+      const result = await controller.updateBook(userEntity, bookInput, 2);
 
       //assert
       expect(result).toEqual(bookInput);
+    });
+
+    it('case 2: Book info is not updated', async () => {
+      //prepare
+      const bookInput: UpdateBookDTO = {
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+      };
+
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
+      mockBookService.updateBook.mockResolvedValue({
+        title: 'Secret Wishlist',
+        author: 'Mr ABC',
+        category: BookCategory.Romantic,
+        quantity: 10,
+      });
+
+      //call
+      const error = new Error('test-error book is not updated');
+      mockBookService.updateBook.mockRejectedValue(error);
+
+      //assert
+      expect(
+        controller.updateBook(userEntity, bookInput, 2),
+      ).rejects.toThrowError('book is not updated');
     });
   });
 
@@ -122,39 +219,95 @@ describe('BookController', () => {
   //       bookId: 1,
   //       userId: 2,
   //     };
-
+  //     const userEntity: UserEntity = {
+  //       username: 'user',
+  //       email: 'user@gmail.com',
+  //       password: 'user',
+  //       userId: 1,
+  //       bookUsers: null,
+  //       validatePassword: function (password: string): boolean {
+  //         const encrypted = `${crypto.MD5(password)}`;
+  //         return encrypted == this.password;
+  //       },
+  //     };
   //     mockBookService.issuedBook.mockResolvedValue({
   //       bookId: 1,
   //       userId: 2,
   //       issuedDate: moment().toISOString(),
   //       returnDate: moment().add(7, 'days').format('L'),
   //       book: null,
-  //       id: 2,
+  //       id: 1,
   //       user: null,
   //       deletedAt: new Date(),
   //     });
 
   //     //call
-  //     const result = await controller.issuedBook(bookInput);
+  //     const result = await controller.issuedBook(userEntity, bookInput);
 
   //     //assert
   //     expect(result).toEqual(bookInput);
   //   });
   // });
 
+  // describe('returnBook', () => {
+  //   it('case 1: Book is returned by user successfully', async () => {
+  //     const input: ReturnBookDTO = {
+  //       bookId: 1,
+  //       userId: 2,
+  //     };
+
+  //     mockBookService.returnBook.mockResolvedValue({
+  //       title: 'test',
+  //       author: 'ABC',
+  //       category: BookCategory.Adventure,
+  //       quantity: 10,
+  //       bookId: 2,
+  //       bookUsers: null,
+  //     });
+
+  //     const result = await controller.returnBook( ,input);
+  //     expect(result).toEqual();
+
+  //   });
+  // });
+
   describe('deleteBook', () => {
     it('case 1: delete book of given ID', async () => {
-      const result = await controller.deleteBook(2);
-      expect(result).toEqual(controller.deleteBook(2));
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
+      const result = await controller.deleteBook(userEntity, 2);
+      expect(result).toEqual(controller.deleteBook(userEntity, 2));
     });
 
     it('case 2: book is not deleted', async () => {
-      try {
-        const result = await controller.deleteBook(2);
-        expect(result).toEqual(controller.deleteBook(2));
-      } catch (err) {
-        return err.message;
-      }
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
+
+      const error = new Error('test-error book is not deleted');
+      mockBookService.deleteBook.mockRejectedValue(error);
+
+      //assert
+      expect(controller.deleteBook(userEntity, 2)).rejects.toThrowError(
+        'book is not deleted',
+      );
     });
   });
 });

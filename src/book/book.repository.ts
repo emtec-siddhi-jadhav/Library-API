@@ -29,14 +29,21 @@ export class BookRepository extends Repository<BookEntity> {
     return await query.getMany();
   }
 
-  async createBook(createBookDto: CreateBookDTO): Promise<BookEntity> {
-    const book = new BookEntity();
-    book.title = createBookDto.title;
-    book.author = createBookDto.author;
-    book.category = createBookDto.category;
-    book.quantity = createBookDto.quantity;
-    console.log(book);
-    return this.save(book);
+  async createBook(
+    user: UserEntity,
+    createBookDto: CreateBookDTO,
+  ): Promise<BookEntity> {
+    if (user.userId == 1) {
+      const book = new BookEntity();
+      book.title = createBookDto.title;
+      book.author = createBookDto.author;
+      book.category = createBookDto.category;
+      book.quantity = createBookDto.quantity;
+      console.log(book);
+      return this.save(book);
+    } else {
+      throw new UnauthorizedException('Only admin can create the book');
+    }
   }
 
   validateBookQuantity(quantity: number) {
@@ -80,37 +87,41 @@ export class BookRepository extends Repository<BookEntity> {
     }
   }
 
-  async updateBook(updateBookDto: UpdateBookDTO, id: number) {
-    const book = await this.findOne(id);
-    const OldData = {
-      title: book.title,
-      author: book.author,
-      category: book.category,
-      quantity: book.quantity,
-    };
-    console.log(OldData);
-    const updateData = {
-      title: updateBookDto.title,
-      author: updateBookDto.author,
-      category: updateBookDto.category,
-      quantity: updateBookDto.quantity,
-    };
-    if (updateData.title == null) {
-      updateData.title = OldData.title;
-    }
+  async updateBook(user: UserEntity, updateBookDto: UpdateBookDTO, id: number) {
+    if (user.userId == 1) {
+      const book = await this.findOne(id);
+      const OldData = {
+        title: book.title,
+        author: book.author,
+        category: book.category,
+        quantity: book.quantity,
+      };
+      console.log(OldData);
+      const updateData = {
+        title: updateBookDto.title,
+        author: updateBookDto.author,
+        category: updateBookDto.category,
+        quantity: updateBookDto.quantity,
+      };
+      if (updateData.title == null) {
+        updateData.title = OldData.title;
+      }
 
-    if (updateData.author == null) {
-      updateData.author = OldData.author;
-    }
+      if (updateData.author == null) {
+        updateData.author = OldData.author;
+      }
 
-    if (updateData.category == null) {
-      updateData.category = OldData.category;
-    }
+      if (updateData.category == null) {
+        updateData.category = OldData.category;
+      }
 
-    if (updateData.quantity == null) {
-      updateData.quantity = OldData.quantity;
+      if (updateData.quantity == null) {
+        updateData.quantity = OldData.quantity;
+      }
+      await this.update(id, updateData);
+      return updateData;
+    } else {
+      throw new UnauthorizedException('Only admin can update the book');
     }
-    await this.update(id, updateData);
-    return updateData;
   }
 }

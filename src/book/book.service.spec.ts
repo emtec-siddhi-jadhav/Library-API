@@ -7,6 +7,8 @@ import { BookRepository } from './book.repository';
 import { BookService } from './book.service';
 import { BookEntity } from './book.entity';
 import { SearchBookDTO } from './dto/search.book.dto';
+import { UserEntity } from 'src/user/user.entity';
+import * as crypto from 'crypto-js';
 
 describe('BookService', () => {
   let service: BookService;
@@ -39,6 +41,18 @@ describe('BookService', () => {
         quantity: 10,
       };
 
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
+
       mockBookRepository.createBook.mockResolvedValue({
         bookId: 1,
         title: 'Secret Wishlist',
@@ -49,7 +63,7 @@ describe('BookService', () => {
       });
 
       //call
-      const result = await service.createBook(bookInput);
+      const result = await service.createBook(userEntity, bookInput);
 
       //assert
       expect(result.title).toEqual(bookInput.title);
@@ -96,6 +110,17 @@ describe('BookService', () => {
         category: BookCategory.Romantic,
         quantity: 10,
       };
+      const userEntity: UserEntity = {
+        username: 'user',
+        email: 'user@gmail.com',
+        password: 'user',
+        userId: 1,
+        bookUsers: null,
+        validatePassword: function (password: string): boolean {
+          const encrypted = `${crypto.MD5(password)}`;
+          return encrypted == this.password;
+        },
+      };
 
       mockBookRepository.updateBook.mockResolvedValue({
         title: 'Secret Wishlist',
@@ -105,13 +130,10 @@ describe('BookService', () => {
       });
 
       //call
-      const result = await service.updateBook(bookInput, 2);
+      const result = await service.updateBook(userEntity, bookInput, 2);
 
       //assert
-      expect(result.title).toEqual(bookInput.title);
-      expect(result.author).toEqual(bookInput.author);
-      expect(result.category).toEqual(bookInput.category);
-      expect(result.quantity).toEqual(bookInput.quantity);
+      expect(result).toEqual(bookInput);
     });
   });
 });

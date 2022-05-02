@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookUserEntity } from 'src/BookUserBook/book.user.entity';
@@ -26,18 +27,25 @@ export class BookService {
     return this.bookRepository.getBooks(searchBookDto);
   }
 
-  async createBook(createBookDto: CreateBookDTO): Promise<BookEntity> {
-    return this.bookRepository.createBook(createBookDto);
+  async createBook(
+    user: UserEntity,
+    createBookDto: CreateBookDTO,
+  ): Promise<BookEntity> {
+    return this.bookRepository.createBook(user, createBookDto);
   }
 
   async updateBook(
+    user: UserEntity,
     updateBookDto: UpdateBookDTO,
     id: number,
   ): Promise<UpdateBookDTO> {
-    return this.bookRepository.updateBook(updateBookDto, id);
+    return this.bookRepository.updateBook(user, updateBookDto, id);
   }
 
-  async issuedBook(issuedBookDto: IssuedBookDTO): Promise<BookUserEntity> {
+  async issuedBook(
+    user: UserEntity,
+    issuedBookDto: IssuedBookDTO,
+  ): Promise<BookUserEntity> {
     return this.bookRepository.issuedBook(issuedBookDto);
   }
 
@@ -45,17 +53,21 @@ export class BookService {
     return this.bookRepository.returnBook(returnBookDto, user);
   }
 
-  async deleteBook(id: number) {
-    const result = await this.bookRepository.delete(id);
-    if (result.affected == 0) {
-      throw new NotFoundException('book not found');
+  async deleteBook(user: UserEntity, id: number) {
+    if (user.userId == 1) {
+      const result = await this.bookRepository.delete(id);
+      if (result.affected == 0) {
+        throw new NotFoundException('book not found');
+      }
+      throw new HttpException(
+        {
+          status: HttpStatus.OK,
+          message: 'Book is deleted',
+        },
+        HttpStatus.OK,
+      );
+    } else {
+      throw new UnauthorizedException('Only admin can delete the book');
     }
-    throw new HttpException(
-      {
-        status: HttpStatus.OK,
-        message: 'Book is deleted',
-      },
-      HttpStatus.OK,
-    );
   }
 }
