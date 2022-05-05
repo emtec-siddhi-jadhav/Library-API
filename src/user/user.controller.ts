@@ -28,7 +28,7 @@ export class UserController {
     return this.userService.signUp(authCredentialsSignUpDTO);
   }
 
-  @Get('/signin')
+  @Post('/signin')
   @UsePipes(ValidationPipe)
   signIn(@Body() authCredentialsSignInDTO: AuthCredentialsSignInDTO): Promise<{
     token: string;
