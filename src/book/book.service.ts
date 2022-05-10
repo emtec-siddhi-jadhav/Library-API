@@ -31,7 +31,11 @@ export class BookService {
     user: UserEntity,
     createBookDto: CreateBookDTO,
   ): Promise<BookEntity> {
-    return this.bookRepository.createBook(user, createBookDto);
+    if (user.userId == 1) {
+      return this.bookRepository.createBook(createBookDto);
+    } else {
+      throw new UnauthorizedException('You are not admin');
+    }
   }
 
   async updateBook(
