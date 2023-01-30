@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as moment from 'moment';
-import { IssuedBookDTO } from 'src/book/dto/issued.book.dto';
-import { ReturnBookDTO } from 'src/book/dto/return.book.dto';
+import { IssuedBookDTO } from '../book/dto/issued.book.dto';
+import { ReturnBookDTO } from '../book/dto/return.book.dto';
 import { EntityRepository, Repository } from 'typeorm';
 import { BookUserEntity } from './book.user.entity';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -31,7 +31,7 @@ export class BookUserRepository extends Repository<BookUserEntity> {
       userId: issuedBookDto.userId,
       bookId: issuedBookDto.bookId,
       issuedDate: moment().toISOString(),
-      returnDate: moment().add(1, 'day').format('L'),
+      returnDate: moment().add(7, 'days').format('L'),
     });
     return this.save(bookuser);
   }

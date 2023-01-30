@@ -13,8 +13,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/user/get.user.decorators';
-import { UserEntity } from 'src/user/user.entity';
+import { GetUser } from '../user/get.user.decorators';
+import { UserEntity } from '../user/user.entity';
 import { BookEntity } from './book.entity';
 import { BookService } from './book.service';
 import { CreateBookDTO } from './dto/create.book.dto';
@@ -30,8 +30,11 @@ export class BookController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createBook(@Body() createBookDto: CreateBookDTO): Promise<BookEntity> {
-    return this.bookService.createBook(createBookDto);
+  createBook(
+    @GetUser() user: UserEntity,
+    @Body() createBookDto: CreateBookDTO,
+  ): Promise<BookEntity> {
+    return this.bookService.createBook(user, createBookDto);
   }
 
   @Get()
@@ -40,13 +43,20 @@ export class BookController {
   }
 
   @Put('/:id')
-  updateBook(@Body() updateBookDto: UpdateBookDTO, @Param('id') id: number) {
-    return this.bookService.updateBook(updateBookDto, id);
+  updateBook(
+    @GetUser() user: UserEntity,
+    @Body() updateBookDto: UpdateBookDTO,
+    @Param('id') id: number,
+  ) {
+    return this.bookService.updateBook(user, updateBookDto, id);
   }
 
   @Patch()
-  issuedBook(@Body() issuedBookDto: IssuedBookDTO) {
-    return this.bookService.issuedBook(issuedBookDto);
+  issuedBook(
+    @GetUser() user: UserEntity,
+    @Body() issuedBookDto: IssuedBookDTO,
+  ) {
+    return this.bookService.issuedBook(user, issuedBookDto);
   }
 
   @Delete()
@@ -58,7 +68,7 @@ export class BookController {
   }
 
   @Delete('/:id')
-  deleteBook(@Param('id') id: number) {
-    return this.bookService.deleteBook(id);
+  deleteBook(@GetUser() user: UserEntity, @Param('id') id: number) {
+    return this.bookService.deleteBook(user, id);
   }
 }

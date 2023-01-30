@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SearchUserDTO } from './dto/search.user.dto';
 import { UpdateUserDTO } from './dto/update.user.dto';
 import { JwtPayload } from './jwt.payload';
 import { UserEntity } from './user.entity';
@@ -41,8 +40,8 @@ export class UserService {
     }
   }
 
-  async getUsers(searchUserDto: SearchUserDTO): Promise<UserEntity[]> {
-    return this.userRepository.getUsers(searchUserDto);
+  async getUsers(): Promise<UserEntity[]> {
+    return this.userRepository.getUsers();
   }
 
   async updateUser(updateUserDto: UpdateUserDTO, id: number) {

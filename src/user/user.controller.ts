@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -14,7 +13,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { AuthCredentialsSignInDTO } from './dto/auth.credentials.signin.dto';
 import { AuthCredentialsSignUpDTO } from './dto/auth.credentials.signup.dto';
-import { SearchUserDTO } from './dto/search.user.dto';
 import { UpdateUserDTO } from './dto/update.user.dto';
 import { GetUser } from './get.user.decorators';
 import { UserEntity } from './user.entity';
@@ -30,7 +28,7 @@ export class UserController {
     return this.userService.signUp(authCredentialsSignUpDTO);
   }
 
-  @Get('/signin')
+  @Post('/signin')
   @UsePipes(ValidationPipe)
   signIn(@Body() authCredentialsSignInDTO: AuthCredentialsSignInDTO): Promise<{
     token: string;
@@ -46,8 +44,8 @@ export class UserController {
 
   @Get()
   @UseGuards(AuthGuard())
-  getUsers(@Query() searchUserDto: SearchUserDTO): Promise<UserEntity[]> {
-    return this.userService.getUsers(searchUserDto);
+  getUsers(): Promise<UserEntity[]> {
+    return this.userService.getUsers();
   }
 
   @Put('/:id')
